@@ -7,7 +7,7 @@ https://www.cs.toronto.edu/~david/courses/csc324_f14/learn.html
 |#
 #lang racket
 
-#|
+#|----------------------------------------------------------------------
 (subsets-k lst k)
   lst: a list of distinct elements
   k: a natural number (including 0)
@@ -32,11 +32,11 @@ https://www.cs.toronto.edu/~david/courses/csc324_f14/learn.html
   k: number of space left in the current list
 |#
 (define (subsets-recur lst curr k)
-  (if (equal? k 0)
+  (if (equal? k 0);Base case
       (list curr)
-      (if (> (length lst) k)
+      (if (> (length lst) k);Checking options
           (append (vertical-move lst curr k)(horizontal-move lst curr k))
-          (vertical-move lst curr k))))
+          (vertical-move lst curr k))));Only option, move vertically
 #|
 (horizontal-move lst curr k)
   Looping the lst horizontally and looking into the options
@@ -54,5 +54,27 @@ https://www.cs.toronto.edu/~david/courses/csc324_f14/learn.html
 (define test-k1 4)
 
 (subsets-k test-lst1 test-k1)
+
+
+
+
+
+#|----------------------------------------------------------------------
+(my-remove-duplicates lst)
+  lst: a list
+
+  Output a new list containing the distinct elements in lst.
+  Order matters: only the *first* occurrence of any duplicate remains.
+
+> (my-remove-duplicates '(1 2 3 1 3 1))
+'(1 2 3) ; the *last three elements* are removed.
+> (my-remove-duplicates '(4 3 2 1))
+'(4 3 2 1)
+
+NOTE: name changed to *my-*remove-duplicates.
+There is already a function called remove-duplicates provided by Racket;
+of course, you are NOT allowed to use this function in your code.
+|#
+
 
 
