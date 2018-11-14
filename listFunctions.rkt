@@ -7,7 +7,6 @@ https://www.cs.toronto.edu/~david/courses/csc324_f14/learn.html
 |#
 #lang racket
 
-
 #|
 (subsets-k lst k)
   lst: a list of distinct elements
@@ -24,26 +23,36 @@ https://www.cs.toronto.edu/~david/courses/csc324_f14/learn.html
 > (subsets-k '(1 2) 5)
 '()
 |#
-(define (subsets-k lst k) (void))
+(define (subsets-k lst k) (subsets-recur lst empty k))
 
 #|
 (subsets-recur lst n curr k)
   lst: a list of distinct elements
-  n: an int indicates number of options in the lst left
   curr: current list assembled till now
   k: number of space left in the current list
-
 |#
-(define (subsets-recur lst n curr k)
+(define (subsets-recur lst curr k)
   (if (equal? k 0)
       (list curr)
-      (if (> n k)
-          (append (subsets-recur (rest lst) (- n 1) (append curr (list (first lst))) (- k 1))
-           (subsets-recur (rest lst) (- n 1) curr k))
-          (subsets-recur (rest lst) (- n 1) (append curr (list (first lst))) (- k 1)))))
+      (if (> (length lst) k)
+          (append (vertical-move lst curr k)(horizontal-move lst curr k))
+          (vertical-move lst curr k))))
+#|
+(horizontal-move lst curr k)
+  Looping the lst horizontally and looking into the options
+|#
+(define (horizontal-move lst curr k) (subsets-recur (rest lst) curr k))
 
-(define test-lst '(2 3 4 5 6))
-(define test-n (length test-lst))
-(define test-curr empty)
-(define test-k 2)
-(subsets-recur test-lst test-n test-curr test-k)
+#|
+(vertical-move lst curr k)
+  Deeping into the lst vertically and picking numbers
+|#
+(define (vertical-move lst curr k)
+  (subsets-recur (rest lst) (append curr (list (first lst))) (- k 1)))
+
+(define test-lst1 '(2 3 4 5 6))
+(define test-k1 4)
+
+(subsets-k test-lst1 test-k1)
+
+
