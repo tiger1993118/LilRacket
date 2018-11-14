@@ -25,3 +25,25 @@ https://www.cs.toronto.edu/~david/courses/csc324_f14/learn.html
 '()
 |#
 (define (subsets-k lst k) (void))
+
+#|
+(subsets-recur lst n curr k)
+  lst: a list of distinct elements
+  n: an int indicates number of options in the lst left
+  curr: current list assembled till now
+  k: number of space left in the current list
+
+|#
+(define (subsets-recur lst n curr k)
+  (if (equal? k 0)
+      (list curr)
+      (if (> n k)
+          (append (subsets-recur (rest lst) (- n 1) (append curr (list (first lst))) (- k 1))
+           (subsets-recur (rest lst) (- n 1) curr k))
+          (subsets-recur (rest lst) (- n 1) (append curr (list (first lst))) (- k 1)))))
+
+(define test-lst '(2 3 4 5 6))
+(define test-n (length test-lst))
+(define test-curr empty)
+(define test-k 2)
+(subsets-recur test-lst test-n test-curr test-k)
