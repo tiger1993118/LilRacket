@@ -56,9 +56,6 @@ https://www.cs.toronto.edu/~david/courses/csc324_f14/learn.html
 ;(subsets-k test-lst1 test-k1)
 
 
-
-
-
 #|----------------------------------------------------------------------
 (my-remove-duplicates lst)
   lst: a list
@@ -94,7 +91,8 @@ Return True if x isn't in lst, False elsewise
 
 ;(my-remove-duplicates '(1 2 3 1 3 1))
 
-#| 
+
+#|----------------------------------------------------------------------
 (apply-functions list-of-functions arg)
   list-of-functions: a list of unary functions
   arg: a valid argument to each function in list-of-functions
@@ -109,7 +107,8 @@ Return True if x isn't in lst, False elsewise
 
 ;(apply-functions (list (lambda (x) (+ x x)) (lambda (x) (+ 1 3))) 10)
 
-#|
+
+#|----------------------------------------------------------------------
 (test-f f inputs outputs)
   f: a unary function
   inputs: a list of valid arguments to f
@@ -129,4 +128,36 @@ HINT: look up the Racket documentation of map; it can take two lists!
 (define (test-f f inputs outputs)
   (foldl (lambda (x y counter) (if (equal? x y) (+ counter 1) counter)) 0 (map f inputs) outputs))
   
-;(test-f (lambda (x) (+ x 1)) '(1 2 3) '(3 3 10))
+;(test-f (lambda (x) (+ x 1)) '(1 2 3) '(3 3 10))(provide f-max fix)
+
+
+#|----------------------------------------------------------------------
+(f-max f g)
+  f, g: unary functions *whose input and output are numbers*
+
+  Return a new unary function that always returns the max of f and g
+  applied to its argument.
+
+> (define h (f-max (lambda (x) (+ x x)) (lambda (x) (- x 10)))
+> (h 23)
+46
+|#
+(define (f-max f g)
+  (lambda (x)
+    (let* ([a (f x)]
+           [b (g x)])
+      (if (> a b) a b))))
+
+;(define h (f-max (lambda (x) (+ x x)) (lambda (x) (- x 10))))
+;(h 23)
+
+
+
+
+
+
+
+
+
+
+
