@@ -152,6 +152,36 @@ HINT: look up the Racket documentation of map; it can take two lists!
 ;(h 23)
 
 
+#|----------------------------------------------------------------------
+(fix f n x)
+  f: a function taking m arguments
+  n: a natural number, 1 <= n <= m
+  x: an argument
+
+  Return a new function g that takes m-1 arguments, which acts as follows:
+  (g a_1 ... a_{n-1} a_{n+1} ... a_m)
+  = (f a_1 ... a_{n-1} x a_{n+1} ... a_m)
+
+  That is, x is inserted as the nth argument in a call to f.
+
+> (define f (lambda (x y z) (+ x (* y (+ z 1)))))
+> (define g (fix f 2 100))
+> (g 2 4) ; equivalent to (f 2 100 4)
+502
+
+HINT:
+1. It might seem unusual to create a function whose arity (number of arguments)
+   isn't a fixed constant. Use a slightly easier approach and use a "rest argument"
+   to create a function that takes an arbitrary number of arguments.
+   (See note on course webpage about Rest Arguments under week 4.)
+   You can assume we'll only call your created function with the correct number
+   of arguments.
+2. Use the function (apply f lst), which calls f with the arguments
+   contained in the list lst.
+|#
+(define (fix f n x) (void))
+
+
 
 
 
