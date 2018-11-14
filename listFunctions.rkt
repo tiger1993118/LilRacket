@@ -75,6 +75,22 @@ NOTE: name changed to *my-*remove-duplicates.
 There is already a function called remove-duplicates provided by Racket;
 of course, you are NOT allowed to use this function in your code.
 |#
+(define (my-remove-duplicates lst) (foldl append-unique empty lst))
 
+#|
+(append-unique x lst)
+Append x to lst, if it isn't in lst
+|#
+(define (append-unique x lst)
+  (if (unique x lst) (append lst (list x)) lst))
 
+#|
+(unique x lst)
+Return True if x isn't in lst, False elsewise
+|#
+(define (unique x lst)
+  (if (empty? lst) #t
+      (and (not (equal? (first lst) x)) (unique x (rest lst))))); lazy evaluation
+
+(my-remove-duplicates '(1 2 3 1 3 1))
 
