@@ -1,9 +1,9 @@
 # LilRacket
-Some small random racket functions or project
+Some random racket functions that I write for fun and some past project that I have fun with
 
-These Functions and projects come from different sources and aim for different purpose
-- Some of them are from courses, or school projects(I will give the credit and links to where it from)
-- Some of them are helper functions, kept for future reference
+These functions and projects come from different sources and aim for different purposes
+- Some of them are from courses, or school projects(I will credit and link them to where it from)
+- Some of them are helper functions, which are kept for future reference
 - The rest of them are just for fun or practice purpose
 
 
