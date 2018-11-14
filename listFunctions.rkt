@@ -108,3 +108,22 @@ Return True if x isn't in lst, False elsewise
   (map (lambda (f) (f arg)) list-of-functions))
 
 (apply-functions (list (lambda (x) (+ x x)) (lambda (x) (+ 1 3))) 10)
+
+#|
+(test-f f inputs outputs)
+  f: a unary function
+  inputs: a list of valid arguments to f
+  outputs: a list of the same length as inputs
+
+  For each corresponding (input, output) pair from inputs and outputs,
+  evaluate f at each input; a SUCCESS occurs when the result is
+  "equal?" to output.
+
+  Return the number of SUCCESSes.
+
+> (test-f (lambda (x) (+ x 1)) '(1 2 3) '(3 3 10))
+1 ; the only SUCCESS is the pair of second elements
+
+HINT: look up the Racket documentation of map; it can take two lists!
+|#
+(define (test-f f inputs outputs) (void))
