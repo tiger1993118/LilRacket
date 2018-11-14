@@ -53,7 +53,7 @@ https://www.cs.toronto.edu/~david/courses/csc324_f14/learn.html
 (define test-lst1 '(2 3 4 5 6))
 (define test-k1 4)
 
-(subsets-k test-lst1 test-k1)
+;(subsets-k test-lst1 test-k1)
 
 
 
@@ -92,5 +92,19 @@ Return True if x isn't in lst, False elsewise
   (if (empty? lst) #t
       (and (not (equal? (first lst) x)) (unique x (rest lst))))); lazy evaluation
 
-(my-remove-duplicates '(1 2 3 1 3 1))
+;(my-remove-duplicates '(1 2 3 1 3 1))
 
+#| 
+(apply-functions list-of-functions arg)
+  list-of-functions: a list of unary functions
+  arg: a valid argument to each function in list-of-functions
+
+  Return a list of the results of applying each function to arg.
+
+> (apply-functions (list (lambda (x) (+ x x)) (lambda (x) (+ 1 3))) 10)
+'(20 4)
+|#
+(define (apply-functions list-of-functions arg)
+  (map (lambda (f) (f arg)) list-of-functions))
+
+(apply-functions (list (lambda (x) (+ x x)) (lambda (x) (+ 1 3))) 10)
