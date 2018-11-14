@@ -107,7 +107,7 @@ Return True if x isn't in lst, False elsewise
 (define (apply-functions list-of-functions arg)
   (map (lambda (f) (f arg)) list-of-functions))
 
-(apply-functions (list (lambda (x) (+ x x)) (lambda (x) (+ 1 3))) 10)
+;(apply-functions (list (lambda (x) (+ x x)) (lambda (x) (+ 1 3))) 10)
 
 #|
 (test-f f inputs outputs)
@@ -126,4 +126,7 @@ Return True if x isn't in lst, False elsewise
 
 HINT: look up the Racket documentation of map; it can take two lists!
 |#
-(define (test-f f inputs outputs) (void))
+(define (test-f f inputs outputs)
+  (foldl (lambda (x y counter) (if (equal? x y) (+ counter 1) counter)) 0 (map f inputs) outputs))
+  
+;(test-f (lambda (x) (+ x 1)) '(1 2 3) '(3 3 10))
