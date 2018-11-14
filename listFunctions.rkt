@@ -179,13 +179,19 @@ HINT:
 2. Use the function (apply f lst), which calls f with the arguments
    contained in the list lst.
 |#
-(define (fix f n x) (void))
+(define (fix f n x)
+  (lambda args (apply f (insert n x args))))
+#|
+ insert x at the nth position of lst
+|#
+(define (insert n x lst)
+  (if (equal? n 1)
+      (cons x lst)
+      (cons (first lst)(insert (- n 1) x (rest lst)))))
 
-
-
-
-
-
+(define f (lambda (x y z) (+ x (* y (+ z 1)))))
+(define g (fix f 2 100))
+(g 2 4)
 
 
 
