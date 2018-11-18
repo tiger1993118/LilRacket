@@ -1,4 +1,4 @@
-racket
+#lang racket
 
 (provide parse-html-tag make-text-parser
          parse-non-special-char parse-plain-char
@@ -16,8 +16,10 @@ racket
 > (parse-html-tag "<hey><html>")
 '(error "<hey><html>")
 |#
-(define (parse-html-tag str) (void))
-
+(define (parse-html-tag str)
+  (if (string-prefix? str "<html>")
+      (list "<html>" (substring str 6))
+      (list 'error str)))
 
 #|
 (make-text-parser t)
@@ -150,3 +152,4 @@ racket
 '(error "<body><p>Not good</body></p>")
 |#
 (define (parse-html str) (void))
+

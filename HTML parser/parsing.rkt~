@@ -1,10 +1,5 @@
-#| Assignment 1 - Parsing (due Oct 11, noon)
+racket
 
-***Write the names and CDF accounts for each of your group members below.***
-<Name>, <CDF>
-<Name>, <CDF>
-|#
-#lang racket
 (provide parse-html-tag make-text-parser
          parse-non-special-char parse-plain-char
          either both star
@@ -21,7 +16,10 @@
 > (parse-html-tag "<hey><html>")
 '(error "<hey><html>")
 |#
-(define (parse-html-tag str) (void))
+(define (parse-html-tag str)
+  (if (string-prefix? str "<html>")
+      (list "<html>" (substring str 6))
+      (list 'error str))
 
 
 #|
