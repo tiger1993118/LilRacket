@@ -1,0 +1,16 @@
+
+#lang racket
+(require "parsing.rkt")
+(require test-engine/racket-tests)
+
+; TODO: WRITE TESTS!!
+;testcases for function parse-html-tag
+(check-expect (parse-html-tag "<html></html>") '("<html>" "</html>"))
+(check-expect (parse-html-tag "<html>") '("<html>" ""))
+(check-expect (parse-html-tag "<html> abcde ") '("<html>" " abcde "))
+(check-expect (parse-html-tag "<hey><html>") '(error "<hey><html>"))
+(check-expect (parse-html-tag "<htm></html>") '(error "<htm></html>"))
+(check-expect (parse-html-tag "html></html>") '(error "html></html>"))
+(check-expect (parse-html-tag " <html></html>") '(error " <html></html>"))
+(check-expect (parse-html-tag "") '(error ""))
+(check-expect (parse-html-tag "ab") '(error "ab"))
