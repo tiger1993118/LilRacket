@@ -1,4 +1,4 @@
-An very simple HTML parser
+# A simple HTML parser written in Racket
 Parsing.rkt: The main functions
 Parsing_test.rkt: Include testcases for each functions in Parsing.rkt
 
