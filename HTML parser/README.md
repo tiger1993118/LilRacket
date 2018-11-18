@@ -6,4 +6,4 @@ This project is from one of my functional programming course(CSC324H1) in Univer
 Link: https://www.cs.toronto.edu/~david/courses/csc324_f14/learn.html
 
 Some String functions used in this project:
-http://docs.racket-lang.org/reference/strings.html#%28def._%28%28quote._~23~25kernel%29._make-string%29%29
+http://docs.racket-lang.org/reference/strings.html
