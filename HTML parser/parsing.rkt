@@ -32,7 +32,11 @@
 > (parse-hi "goodbye hi")
 '(error "goodbye hi")
 |#
-(define (make-text-parser t) (void))
+(define (make-text-parser t)
+  (lambda (str)
+    (if (string-prefix? str t)
+        (list t (substring str (string-length t)))
+        (list 'error str))))
 
 
 #|
