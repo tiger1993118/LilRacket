@@ -48,7 +48,13 @@
 > (parse-non-special-char "<html>")
 '(error "<html>")
 |#
-(define (parse-non-special-char str) (void))
+(define (parse-non-special-char str)
+  (let ([char1 (string-ref str 0)])
+    (if (or (equal? char1 #\<) (equal? char1 #\>)
+            (equal? char1 #\=) (equal? char1 #\") (equal? char1 #\/))
+        (list 'error str)
+        (list char1 (substring str 1)))))
+   
 
 
 #|

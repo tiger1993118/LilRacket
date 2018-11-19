@@ -27,3 +27,19 @@
 (define parse-space (make-text-parser "  "))
 (check-equal? (parse-324 " 1") '(error " 1") "Error case: wrong header")
 (check-equal? (parse-space "  11  ") '("  " "11  ") "Special case: space character")
+
+;testcases for fuction parse-non-special-char
+(check-equal? (parse-non-special-char "hi") '(#\h "i") "Normal text")
+(check-equal? (parse-non-special-char "one") '(#\o "ne") "Normal text")
+(check-equal? (parse-non-special-char "a") '(#\a "") "Extreme case: String length is 1")
+(check-equal? (parse-non-special-char "  ") '(#\space " ") "Special case: space character")
+(check-equal? (parse-non-special-char "111") '(#\1 "11") "Normal text: number")
+(check-equal? (parse-non-special-char "<html>") '(error "<html>") "Error case: special char <")
+(check-equal? (parse-non-special-char "=5") '(error "=5") "Error case: special char =")
+(check-equal? (parse-non-special-char "/say what") '(error "/say what") "Error case: special char /")
+
+
+
+
+
+
