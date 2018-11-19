@@ -66,7 +66,10 @@
 > (parse-plain-char " hello!")
 '(error " hello!")
 |#
-(define (parse-plain-char str) (void))
+(define (parse-plain-char str)
+  (if (equal? (string-ref str 0) #\space)
+      (list 'error str)
+      (parse-non-special-char str)))
 
 
 #| Parsing Combinators |#
