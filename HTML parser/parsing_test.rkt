@@ -38,6 +38,16 @@
 (check-equal? (parse-non-special-char "=5") '(error "=5") "Error case: special char =")
 (check-equal? (parse-non-special-char "/say what") '(error "/say what") "Error case: special char /")
 
+;testcases for fuction parse-plain-char
+(check-equal? (parse-plain-char "bbc") '(#\b "bc") "Normal text")
+(check-equal? (parse-plain-char ">tell me tell me") '(error ">tell me tell me")
+              "Error case: special char")
+(check-equal? (parse-plain-char "a=") '(#\a "=") "Normal text")
+(check-equal? (parse-plain-char " white space error") '(error " white space error")
+              "Error case: white space")
+(check-equal? (parse-plain-char "") '(error "") "Error case: empty text")
+(check-equal? (parse-plain-char "\"") '(error "\"") "Error case: special char")
+
 
 
 
