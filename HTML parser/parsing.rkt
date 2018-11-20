@@ -88,9 +88,25 @@
 > ((either parse-plain-char parse-html-tag) "<xml>hello")
 '(error "<xml>hello")
 |#
-(define (either parser1 parser2) (void))
+(define (either parser1 parser2)
+  (lambda (str)
+    (let ([result1 (parser1 str)])
+      (if (parse-success result1)
+         result1
+         (parser2 str)))))
 
 
+#|
+(parse-sucess lst)
+
+  Return True if parsing was successful. False elsewise.
+    - Parsing failed when the first element is 'error.
+ 
+|#
+(define (parse-success lst)
+  (if (equal? (first lst) 'error)
+      #f
+      #t))
 #|
 (both parser1 parser2)
 
