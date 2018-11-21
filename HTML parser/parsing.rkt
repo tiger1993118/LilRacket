@@ -166,8 +166,20 @@
 > ((star parse-plain-char) "<html>hi")
 '(() "<html>hi")
 |#
-(define (star parser) (void))
+(define (star parser)
+  (lambda (str)
+    (star-recur parser str empty)))
 
+(define (star-recur parser str lst)
+  (if (equal? str "")
+      (list lst str)
+      (let* ([result1 (parser str)]
+             [head1 (first result1)]
+             [rest1 (second result1)])
+        (if (equal? head1 'error)
+            (list lst str)
+            (star-recur parser rest1 (append lst (list head1))) ))))
+            
 
 #| HTML Parsing |#
 
