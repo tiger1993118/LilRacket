@@ -103,5 +103,18 @@
 (check-equal? ((both parse-html-tag parse-non-special-char)"<html> ") '(("<html>" #\space) "")
               "Two working parser: one word, one char")
 
+;star
+(check-equal? ((star parse-plain-char) "yeah") '((#\y #\e #\a #\h) "") "All string parsed")
+(check-equal? ((star parse-plain-char) "ye ah") '((#\y #\e) " ah") "Partial string parsed")
+(check-equal? ((star parse-plain-char) "<yeah") '(() "<yeah") "No string parsed")
+;self defined parser
+(define parse-equal (make-text-parser "="))
+(check-equal? ((star parse-equal) "======= ") '(("=" "=" "=" "=" "=" "=" "=") " ") "All string parsed")
+(check-equal? ((star parse-equal) "<") '(() "<") "No string parsed")
+(check-equal? ((star parse-non-special-char) "today") '((#\t #\o #\d #\a #\y) "") "All string parsed")
+(check-equal? ((star parse-non-special-char) "to=ay") '((#\t #\o ) "=ay") "Partial string parsed")
+(check-equal? ((star parse-non-special-char) " ab ") '((#\space #\a #\b #\space) "") "All string parsed")
+(check-equal? ((star parse-html-tag) "<html") '(() "<html") "No string parsed")
+
 
 
