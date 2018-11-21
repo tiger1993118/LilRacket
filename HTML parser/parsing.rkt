@@ -127,7 +127,23 @@
 > ((both parse-html-tag parse-plain-char) "<html> hello")
 '(error "<html> hello")
 |#
-(define (both parser1 parser2) (void))
+(define (both parser1 parser2)
+  (lambda (str)
+    (let* ([result1 (parser1 str)]
+           [char1 (first result1)]
+           [rest1 (second result1)])
+      
+      (if (parse-success result1)
+          
+          (let* ([result2 (parser2 rest1)]
+                 [char2 (first result2)]
+                 [rest2 (second result2)])
+            
+            (if (parse-success result2)
+                (list (list char1 char2) rest2)
+            (list 'error str)))
+          
+          (list 'error str)))))
 
 
 #|
