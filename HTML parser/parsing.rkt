@@ -5,6 +5,10 @@
          either both star
          parse-html)
 
+;Helper functions
+(provide parse-success parse-non-special-text
+         parse-plain-text apply-parse-char)
+
 #|
 (parse-html-tag str)
 
@@ -92,7 +96,7 @@ Returning:
       (parse-non-special-char str)))
 
 
-#| Parsing Combinators |#
+#|--------------Parsing Combinators----------------------|#
 
 #|
 (either parser1 parser2)
@@ -234,7 +238,7 @@ Returning:
 
 
 
-#|Helper Functions|#
+;--------------------Helper functions--------------------
 
 #|
 
@@ -250,10 +254,7 @@ Some Pesudo Code
 (define (open-parser str)(void))
 (define (close-parser str)(void))
 
-(define (text-parser str)
-  (star (non-special-parser) str))
 |#
-
 
 #|
 (parse-sucess lst)
@@ -270,6 +271,59 @@ Returning:
   (if (equal? (first lst) 'error)
       #f
       #t))
+
+
+#|
+(apply-parse-char parser)
+
+Returning:
+  function
+
+  Parsing a higher order function that parse characters continously and combine them into string
+
+>(define f (apply-parse-char parse-non-special-char))
+>(f "  This is a header </header>")
+'("  This is a header " "</header>")
+|#
+(define (apply-parse-char parse-char)
+  (lambda (str)
+    (let ([result ((star parse-char) str)])
+      (list-set result 0 (apply string (first result))))))
+
+      
+#|
+(parse-non-special-text str)
+
+Returning:
+  '("parsed-string" "rest-of-str")
+
+  Parsing a long text that only contains non-special characters.
+  Returning a list including its parsed text and the rest of string.
+
+>(parser-non-special-text "  This is a header </header>")
+'("  This is a header " "</header>")
+|#
+(define (parse-non-special-text str)
+  ((apply-parse-char parse-non-special-char) str))
+
+#|
+(parse-non-special-text str)
+
+Returning:
+  '("parsed-string" "rest-of-str")
+
+  Parsing a long text that only contains non-special characters.
+  Returning a list including its parsed text and the rest of string.
+
+>(parser-non-special-text "  This is a header </header>")
+'("  This is a header " "</header>")
+|#
+(define (parse-plain-text str)
+  ((apply-parse-char parse-plain-char) str))
+
+
+
+
 
 
 
