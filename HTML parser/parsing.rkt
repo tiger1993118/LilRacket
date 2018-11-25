@@ -7,6 +7,11 @@
 
 #|
 (parse-html-tag str)
+
+Returning:
+  '("<html>" "rest-of-str")
+  '(error "str")
+
   If str starts with "<html>", returns a pair (list "<html>" rest), where
   rest is the part of str after "<html>".
   Otherwise, returns (list 'error str), signifying an error.
@@ -21,8 +26,13 @@
       (list "<html>" (substring str 6))
       (list 'error str)))
 
+
 #|
 (make-text-parser t)
+
+Returning:
+  parser function
+
   Return a parser that tries to read *one* occurrence of t at the
   start of its input.
 
@@ -41,6 +51,11 @@
 
 #|
 (parse-non-special-char str)
+
+Returning:
+  '(char "rest-of-string")
+  '(error "str")
+  
   Try to parse *one* non-special character at the start of str.
 
 > (parse-non-special-char "hi")
@@ -59,6 +74,11 @@
 
 #|
 (parse-plain-char str)
+
+Returning:
+  '(char "rest-of-string")
+  '(error "str")
+  
   Try to parse *one* non-special, non-white character at the start of str.
 
 > (parse-plain-char "hi")
@@ -76,6 +96,10 @@
 
 #|
 (either parser1 parser2)
+
+Returning:
+  '(parsed-part "rest-of-string")
+  '(error "str")
 
   Return a new parser that does the following:
     - Try to apply parser 1; if success, return that result
@@ -96,19 +120,13 @@
          (parser2 str)))))
 
 
-#|
-(parse-sucess lst)
 
-  Return True if parsing was successful. False elsewise.
-    - Parsing failed when the first element is 'error.
- 
-|#
-(define (parse-success lst)
-  (if (equal? (first lst) 'error)
-      #f
-      #t))
 #|
 (both parser1 parser2)
+
+Returning:
+  '('(parsed-by-1 parsed-by-2) "rest-of-str")
+  '(error "str")
 
   Return a new parser that does the following:
     - Apply parser1; if failure, return failure
@@ -149,6 +167,9 @@
 #|
 (star parser)
 
+Returning:
+  '('(all-parsed-part) "rest-of-string")
+
   Return a new parser that tries to parse using parser
   0 or more times, returning as its data a list of *all*
   parsed values. This new parser should be *greedy*: it
@@ -183,6 +204,7 @@
 
 #| HTML Parsing |#
 
+
 #|
 (parse-html str)
 
@@ -209,4 +231,71 @@
 '(error "<body><p>Not good</body></p>")
 |#
 (define (parse-html str) (void))
+
+
+
+#|Helper Functions|#
+
+#|
+
+Some Pesudo Code
+(define (parse-html str)
+  (element-parser str))
+
+(define (element-parser str)
+  (open-parser str)
+  (either text-parser (star element-parser))
+  (close-parser str))
+
+(define (open-parser str)(void))
+(define (close-parser str)(void))
+
+(define (text-parser str)
+  (star (non-special-parser) str))
+|#
+
+
+#|
+(parse-sucess lst)
+
+Returning:
+  #t
+  #f
+
+  Return True if parsing was successful. False elsewise.
+    - Parsing failed when the first element is 'error.
+ 
+|#
+(define (parse-success lst)
+  (if (equal? (first lst) 'error)
+      #f
+      #t))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
