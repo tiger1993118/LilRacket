@@ -142,6 +142,15 @@
 (check-equal? (parse-text1 "  This is a header </header>") '("  This is a header " "</header>")
               "Parsed all text before speical char")
 
-
+;parse-open-tag
+(check-equal? (parse-open-tag "<tag1>text </tag1>") '(("tag1" ()) "text </tag1>")
+              "Parsed opening tag without attribute")
+(check-equal? (parse-open-tag "  <tag1>text </tag1>") '(("tag1" ()) "text </tag1>")
+              "Parsed opening tag with extra space")
+;(check-equal? (parse-open-tag "<p id ="main" class= "super">Hey</p>")
+;              '(("p" '(("class" "main") ("id" "me "))) "Hey</p>")
+;              "Parsed opening tag with attribute")|
+(check-equal? (parse-open-tag "  a<tag2> error </tag2>") '(error "  a<tag2> error </tag2>")
+              "Error case: invalid opening tag")
 
 
