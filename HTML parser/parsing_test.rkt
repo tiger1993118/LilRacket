@@ -114,6 +114,8 @@
 (check-equal? ((star parse-non-special-char) "today") '((#\t #\o #\d #\a #\y) "") "All string parsed")
 (check-equal? ((star parse-non-special-char) "to=ay") '((#\t #\o ) "=ay") "Partial string parsed")
 (check-equal? ((star parse-non-special-char) " ab ") '((#\space #\a #\b #\space) "") "All string parsed")
+(check-equal? ((star parse-html-tag) "<html><html><html>") '(("<html>" "<html>" "<html>") "")
+              "All string parsed")
 (check-equal? ((star parse-html-tag) "<html") '(() "<html") "No string parsed")
 
 
