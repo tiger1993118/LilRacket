@@ -6,8 +6,9 @@
          parse-html)
 
 ;Helper functions
-(provide parse-success parse-non-special-text
-         parse-plain-text apply-parse-char)
+(provide parse-success apply-parse-char
+         parse-non-special-text parse-plain-text 
+         parse-open-tag)
 
 #|
 (parse-html-tag str)
@@ -257,6 +258,13 @@ Some Pesudo Code
 |#
 
 #|
+|#
+
+(define parse-open-bracket (make-text-parser "<"))
+(define parse-close-bracket (make-text-parser ">"))
+
+
+#|
 (parse-sucess lst)
 
 Returning:
@@ -307,7 +315,7 @@ Returning:
   ((apply-parse-char parse-non-special-char) str))
 
 #|
-(parse-non-special-text str)
+(parse-plain-text str)
 
 Returning:
   '("parsed-string" "rest-of-str")
@@ -315,15 +323,49 @@ Returning:
   Parsing a long text that only contains non-special characters.
   Returning a list including its parsed text and the rest of string.
 
->(parser-non-special-text "  This is a header </header>")
-'("  This is a header " "</header>")
+>(parser-plain-text "Text </header>")
+'("Text" " </header>")
 |#
 (define (parse-plain-text str)
   ((apply-parse-char parse-plain-char) str))
 
+#|
+(parse-open-tag str)
 
+Returning:
+  '('("tag" '(pairs of attributes)) "rest-of-str")
+  '('error "str")
 
+  Parsing the opening tag of a string.
+  Returning a list containing the tag information and the rest of string,
+  Tag information(list) is consisted of the tag name and a list of attributes.
+  Returning '(error str) if parsing failed.
 
+>(parse-open-tag "  <tag1>text </tag1>")
+'(("tag1" ()) "text </tag1>")
+>(parse-open-tag " <p id ="main" class= "super">Hey</p>")
+'(("p" '(("class" "main") ("id" "me "))) "Hey</p>")
+>(parse-open-tag "  </tag2> error </tag1>"
+'('error "  </tag2> error </tag1>")
+|#
+
+(define (parse-open-tag str)
+  ;Parse "<"
+  (let* ([str1 (string-trim str #:right? #f)];Trim the white space on the left
+         [lst1 (parse-open-bracket str1)])
+    ;Parse opening tag
+    (if (parse-success lst1)
+        (let* ([str2 (second lst1)]
+               [lst2 (parse-plain-text str2)];result of tag and rest-str
+               [tag (first lst2)];opening tag
+               ;Parse Attributes
+               [str3 (second lst2)];TODO : ATTRIBUTES PARSE
+               ;Parse ">"
+               [str4 (string-trim str3 #:right? #f)];Trim white space before ">"
+               [rest-str (string-trim str4 ">" #:right? #f)]);Trim ">"
+          ;Combine them and return
+          (list (list tag empty) rest-str))
+        (list 'error str))))
 
 
 
