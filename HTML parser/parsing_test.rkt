@@ -120,3 +120,28 @@
 
 
 
+;--------------------Helper functions--------------------
+;parse-non-special-text
+(check-equal? (parse-non-special-text "yeah") '("yeah" "") "All text parsed")
+(check-equal? (parse-non-special-text "  This is a text ") '("  This is a text " "")
+              "Parsed all text including white space")
+(check-equal? (parse-non-special-text "  This is a header </header>") '("  This is a header " "</header>")
+              "Parsed all text before speical char")
+
+
+;parse-plain-text
+(check-equal? (parse-plain-text "plain") '("plain" "") "All text parsed")
+(check-equal? (parse-plain-text "textafter space") '("textafter" " space")
+              "Parsed all the text before space")
+(check-equal? (parse-plain-text "Text</header>") '("Text" "</header>")
+              "Parsed all text before speical char")
+
+
+;apply-parse-char
+(define parse-text1 (apply-parse-char parse-non-special-char))
+(check-equal? (parse-text1 "  This is a header </header>") '("  This is a header " "</header>")
+              "Parsed all text before speical char")
+
+
+
+
