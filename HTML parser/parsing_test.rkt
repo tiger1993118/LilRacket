@@ -160,3 +160,10 @@
               "Error case: invalid closing tag")
 
 
+;parse-check-tag
+;self-defined parse-abc-tag
+(define parse-abc-tag (parse-check-tag "abc"))
+(check-equal? (parse-abc-tag "</abc> The text after") '("abc" " The text after")
+              "Parsed closing tag")
+(check-equal? (parse-abc-tag "<ab> Error, unmatching closing tag") '(error "<ab> Error, unmatching closing tag")
+              "Error case: unmatching closing tag")
