@@ -8,7 +8,7 @@
 ;Helper functions
 (provide parse-success apply-parse-char
          parse-non-special-text parse-plain-text 
-         parse-open-tag)
+         parse-open-tag parse-close-tag)
 
 #|
 (parse-html-tag str)
@@ -260,9 +260,9 @@ Some Pesudo Code
 #|
 |#
 
-(define parse-open-bracket (make-text-parser "<"))
-(define parse-close-bracket (make-text-parser ">"))
-
+(define parse-left-bracket (make-text-parser "<"))
+;(define parse-right-bracket (make-text-parser ">"))
+(define parse-left-close-tag (make-text-parser "</"))
 
 #|
 (parse-sucess lst)
@@ -352,7 +352,7 @@ Returning:
 (define (parse-open-tag str)
   ;Parse "<"
   (let* ([str1 (string-trim str #:right? #f)];Trim the white space on the left
-         [lst1 (parse-open-bracket str1)])
+         [lst1 (parse-left-bracket str1)])
     ;Parse opening tag
     (if (parse-success lst1)
         (let* ([str2 (second lst1)]
@@ -367,7 +367,34 @@ Returning:
           (list (list tag empty) rest-str))
         (list 'error str))))
 
+#|
+(parse-close-tag str)
 
+Returning:
+  '("tag" "rest-of-str")
+  '('error "str")
+
+  Parsing the closing tag of a string.
+  Returning a list containing the tag and the rest of string,
+
+>(parse-close-tag "</normal> after")
+'("normal" " after")
+>(parse-close-tag "<a/tag>"
+'(error "<a/tag>")
+|#
+(define (parse-close-tag str)
+  ;Parse "</"
+  (let* ([lst1 (parse-left-close-tag str)])
+    ;Parse tag name
+    (if (parse-success lst1)
+        (let* ([str1 (second lst1)]
+               [lst2 (parse-plain-text str1)];result of tag and rest-str
+               [tag (first lst2)];tag name
+               [str2 (second lst2)]
+               [rest-str (string-trim str2 ">" #:right? #f)]);Trim ">"
+          ;Combine them and return
+          (list tag rest-str))
+        (list 'error str))))
 
 
 
