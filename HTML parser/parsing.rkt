@@ -8,7 +8,8 @@
 ;Helper functions
 (provide parse-success apply-parse-char
          parse-non-special-text parse-plain-text 
-         parse-open-tag parse-close-tag)
+         parse-open-tag parse-close-tag
+         parse-check-tag)
 
 #|
 (parse-html-tag str)
@@ -249,11 +250,10 @@ Some Pesudo Code
 
 (define (element-parser str)
   (open-parser str)
-  (either text-parser (star element-parser))
-  (close-parser str))
+  (define parse-match-tag (parse-check-tag "tag"))
+  (either (both parse-text parse-match-tag)
+    (star element-parser)(close-parser str))
 
-(define (open-parser str)(void))
-(define (close-parser str)(void))
 
 |#
 
@@ -396,7 +396,28 @@ Returning:
           (list tag rest-str))
         (list 'error str))))
 
+#|
+(parse-check-tag open-tag)
 
+Returning:
+  a parsing function that accepts string
+
+  Given the open-tag as input, to create function that parse the closing tag of a string,
+  Then comparing the open-tag and close-tag. 
+
+>(define parse-abc-tag (parse-check-tag "abc"))
+>(parse-abc-tag "</abc> The text after")
+'("abc" " The text after")
+>(parse-abc-tag "<ab> Error, unmatching closing tag")
+'(error "<ab> Error, unmatching closing tag")
+|#
+(define (parse-check-tag open-tag)
+  (lambda (str)
+    (let* ([lst (parse-close-tag str)]
+          [close-tag (first lst)])
+      (if (and (parse-success lst) (equal? open-tag close-tag))
+          lst
+          (list 'error str)))))
 
 
 
