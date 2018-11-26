@@ -153,4 +153,10 @@
 (check-equal? (parse-open-tag "  a<tag2> error </tag2>") '(error "  a<tag2> error </tag2>")
               "Error case: invalid opening tag")
 
+;parse-close-tag
+(check-equal? (parse-close-tag "</normal> after") '("normal" " after")
+              "Parsed closing tag")
+(check-equal? (parse-close-tag "<a/tag>") '(error "<a/tag>")
+              "Error case: invalid closing tag")
+
 
