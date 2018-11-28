@@ -167,3 +167,14 @@
               "Parsed closing tag")
 (check-equal? (parse-abc-tag "<ab> Error, unmatching closing tag") '(error "<ab> Error, unmatching closing tag")
               "Error case: unmatching closing tag")
+
+;convert-star-error
+;self-defined a star parsing open tag
+(define star-parse-open (star parse-open-tag))
+(check-equal? (star-parse-open "<outer1><outer2>text</outer2></outer1>") '((("outer1" ()) ("outer2" ())) "text</outer2></outer1>")
+              "star parsing parse-open-tag")
+(define parse-star (convert-star-error star-parse-open))
+(check-equal? (parse-star "<outer1><outer2>text</outer2></outer1>") '((("outer1" ()) ("outer2" ())) "text</outer2></outer1>")
+              "Normal star parsing")
+(check-equal? (parse-star "Should be error </tag>") '(error "Should be error </tag>")
+              "Failed during the first convertion in star parser")
