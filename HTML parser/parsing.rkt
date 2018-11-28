@@ -9,7 +9,7 @@
 (provide parse-success apply-parse-char
          parse-non-special-text parse-plain-text 
          parse-open-tag parse-close-tag
-         parse-check-tag)
+         parse-check-tag convert-star-error)
 
 #|
 (parse-html-tag str)
@@ -342,7 +342,7 @@ Returning:
   Returning '(error str) if parsing failed.
 
 >(parse-open-tag "  <tag1>text </tag1>")
-'(("tag1" ()) "text </tag1>")
+'(("tag1" '()) "text </tag1>")
 >(parse-open-tag " <p id ="main" class= "super">Hey</p>")
 '(("p" '(("class" "main") ("id" "me "))) "Hey</p>")
 >(parse-open-tag "  </tag2> error </tag1>"
@@ -400,7 +400,7 @@ Returning:
 (parse-check-tag open-tag)
 
 Returning:
-  a parsing function that accepts string
+  a parsing function that accepts string and check whether the closing tag matches
 
   Given the open-tag as input, to create function that parse the closing tag of a string,
   Then comparing the open-tag and close-tag. 
@@ -420,10 +420,32 @@ Returning:
           (list 'error str)))))
 
 
+#|
+(convert-star-error star-parser)
+
+Returning:
+  A function that take a string
+
+  Apply star-parser that already defined to the string, but later convert the result to '(error str),
+  if the parser failed at first try during star parsing.
+  This function is fitting for the purpose of function either
+
+>(define star-parse-open (star parse-open-tag))
+>(define parse-star (convert-star-error star-parse-open))
+>(parse-star "<outer1><outer2>text</outer2></outer1>")
+>'((("outer1" '()) '("outer2" '())) "text</outer2></outer1>")
+>(parse-star "Should be error </tag>")
+>'(error "Should be error </tag>")
+|#
 
 
-
-
+(define (convert-star-error star-parser)
+  (lambda (str)
+    (let* ([result (star-parser str)]
+           [lst (first result)])
+    (if (empty? lst)
+        (list-set result 0 'error)
+        result))))
 
 
 
